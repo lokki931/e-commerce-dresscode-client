@@ -1,12 +1,15 @@
 'use client';
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ModeToggle } from '@/components/ModeToggle';
 import { cn } from '@/lib/utils';
 import { AlignJustify, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import AuthBtns from '@/components/AuthBtns';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteCookiesHeader } from '@/app/actions';
+import { reset, userMe } from '@/features/users/userSlice';
 const Links = [
   {
     id: 1,
@@ -31,6 +34,17 @@ const Links = [
 ];
 
 const NavBar = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const me = useSelector((state) => state.users?.me);
+  const handleClick = async () => {
+    dispatch(reset());
+    deleteCookiesHeader();
+    router.push('/');
+  };
+  useEffect(() => {
+    dispatch(userMe());
+  }, [dispatch]);
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const { theme, setTheme } = useTheme();
@@ -67,7 +81,7 @@ const NavBar = () => {
         />
       </nav>
       <ModeToggle />
-      <AuthBtns />
+      <AuthBtns handleClick={handleClick} me={me} />
     </header>
   );
 };

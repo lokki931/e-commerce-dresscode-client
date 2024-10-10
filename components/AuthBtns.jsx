@@ -9,7 +9,7 @@ import {
 import { User } from 'lucide-react';
 import Link from 'next/link';
 
-const AuthBtns = () => {
+const AuthBtns = ({ handleClick, me }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -18,12 +18,25 @@ const AuthBtns = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
-          <Link href={'/sigin'}>Login</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Link href={'/register'}>Register</Link>
-        </DropdownMenuItem>
+        {!me ? (
+          <>
+            <DropdownMenuItem>
+              <Link href={'/signin'}>Login</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={'/register'}>Register</Link>
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <>
+            <DropdownMenuItem>
+              <Link href={'/dashboard'}>Dashboard</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" onClick={handleClick}>
+              Log Out
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import NavBar from '@/components/NavBar';
 import { Toaster } from '@/components/ui/toaster';
 import Footer from '@/components/Footer';
+import { Providers } from './provider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -24,21 +25,25 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange>
-          <div className="flex flex-col min-h-full">
-            <NavBar />
-            <main className="container flex-grow-1 p-4 my-0 mx-auto">{children}</main>
-            <Footer />
-          </div>
+      <Providers>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange>
+            <div className="flex flex-col min-h-screen">
+              <NavBar />
+              <main className="container flex flex-col justify-stretch flex-grow p-4 my-0 mx-auto">
+                {children}
+              </main>
+              <Footer />
+            </div>
 
-          <Toaster />
-        </ThemeProvider>
-      </body>
+            <Toaster />
+          </ThemeProvider>
+        </body>
+      </Providers>
     </html>
   );
 }
