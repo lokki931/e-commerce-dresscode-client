@@ -24,14 +24,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <Providers>
+    <Providers>
+      <html lang="en" suppressHydrationWarning>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange>
+            disableTransitionOnChange
+            enableSystem={true}
+            ssr={false}>
             <div className="flex flex-col min-h-screen">
               <NavBar />
               <main className="container flex flex-col justify-stretch flex-grow p-4 my-0 mx-auto">
@@ -39,11 +40,10 @@ export default function RootLayout({ children }) {
               </main>
               <Footer />
             </div>
-
             <Toaster />
           </ThemeProvider>
         </body>
-      </Providers>
-    </html>
+      </html>
+    </Providers>
   );
 }

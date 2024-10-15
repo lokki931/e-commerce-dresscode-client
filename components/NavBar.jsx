@@ -10,56 +10,45 @@ import AuthBtns from '@/components/AuthBtns';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCookiesHeader } from '@/app/actions';
 import { reset, userMe } from '@/features/users/userSlice';
+
 const Links = [
-  {
-    id: 1,
-    name: 'Home',
-    href: '/',
-  },
-  {
-    id: 2,
-    name: 'Colection',
-    href: '/colection',
-  },
-  {
-    id: 3,
-    name: 'Categories',
-    href: '/categories',
-  },
-  {
-    id: 4,
-    name: 'Contacts',
-    href: '/contacts',
-  },
+  { id: 1, name: 'Home', href: '/' },
+  { id: 2, name: 'Colection', href: '/colection' },
+  { id: 3, name: 'Categories', href: '/categories' },
+  { id: 4, name: 'Contacts', href: '/contacts' },
 ];
 
 const NavBar = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const me = useSelector((state) => state.users?.me);
+  const pathname = usePathname();
+  const [visible, setVisible] = useState(false);
+  const { theme, systemTheme, resolvedTheme } = useTheme();
+
   const handleClick = async () => {
     dispatch(reset());
     deleteCookiesHeader();
     router.push('/');
   };
+
+  const ulStyle = cn(
+    'flex gap-2 max-sm:hidden max-sm:fixed max-sm:w-screen max-sm:h-screen max-sm:left-0 max-sm:flex-col max-sm:top-0 max-sm:pt-14 z-20',
+    visible ? 'max-sm:flex' : 'max-sm:hidden',
+    resolvedTheme === 'dark' ? 'max-sm:bg-black' : 'max-sm:bg-white',
+  );
+
   useEffect(() => {
     dispatch(userMe());
   }, [dispatch]);
-  const pathname = usePathname();
-  const [visible, setVisible] = useState(false);
-  const { theme, setTheme } = useTheme();
+
   return (
     <header className="container my-0 mx-auto p-4 flex gap-4 justify-between items-center">
       <Link href="/">
         <span className="font-bold hover:underline uppercase">Dresscode</span>
       </Link>
       <nav className="ml-auto flex">
-        <ul
-          className={cn(
-            'flex gap-2 max-sm:hidden max-sm:fixed max-sm:w-screen max-sm:h-screen max-sm:left-0 max-sm:flex-col max-sm:top-0 z-10 max-sm:pt-14',
-            visible ? 'max-sm:flex' : 'max-sm:hidden',
-            theme === 'dark' ? 'max-sm:bg-black' : 'max-sm:bg-white',
-          )}>
+        <ul className={ulStyle}>
           {Links.map((link) => (
             <li
               key={link.id}
