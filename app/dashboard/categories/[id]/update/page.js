@@ -11,14 +11,20 @@ import { useEffect } from 'react';
 
 const CategoryUpdateForm = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.categories.category);
   const router = useRouter();
-  const params = useParams();
-  const id = params.id || null;
+  const { id } = useParams();
+  const cat = useSelector((state) => state.categories?.category?.category);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getByIdCats(id));
+    }
+  }, [dispatch, id]);
   const formik = useFormik({
     initialValues: {
-      name: data?.category?.name || '',
+      name: cat?.name || '',
     },
+    enableReinitialize: true,
     validationSchema: Yup.object({
       name: Yup.string().required('Category name is required'),
     }),
@@ -45,9 +51,7 @@ const CategoryUpdateForm = () => {
       }
     },
   });
-  useEffect(() => {
-    dispatch(getByIdCats(id));
-  }, [dispatch, id]);
+
   return (
     <form onSubmit={formik.handleSubmit} className="max-w-lg mx-auto p-6 space-y-4 rounded shadow">
       {/* Name Field */}

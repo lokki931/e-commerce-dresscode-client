@@ -7,34 +7,43 @@ import { useEffect, useState } from 'react';
 import { allCats } from '@/features/users/categorySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { createProduct } from '@/features/users/productSlice';
+import { updateProducts, getByIdProducts } from '@/features/users/productSlice';
 import { toast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
-const ProductForm = () => {
+const UpdateProductForm = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+  const { id } = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
   const cats = useSelector((state) => state.categories?.all);
+  const product = useSelector((state) => state.products?.product?.product);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getByIdProducts(id));
+    }
+  }, [dispatch, id]);
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      description: '',
-      price: 0,
-      stock: 0,
-      discount: false,
-      hit: false,
+      name: product?.name || '',
+      description: product?.description || '',
+      price: product?.price || 0,
+      stock: product?.stock || 0,
+      discount: product?.discount || false,
+      hit: product?.hit || false,
       images: [],
-      categories: [],
+      categories: product?.categories?.map((cat) => cat.id) || [],
     },
-    enableReinitialize: true,
+    enableReinitialize: true, // This will reset the form with new values when the product is loaded
     validationSchema: Yup.object({
       name: Yup.string().required('Product name is required'),
       description: Yup.string().required('Description is required'),
       price: Yup.number().min(0, 'Price must be positive').required('Price is required'),
       stock: Yup.number().min(0, 'Stock must be positive').required('Stock is required'),
-      images: Yup.array().min(1, 'At least one image is required'),
+      images: Yup.array(),
       categories: Yup.array().min(1, 'At least one category is required'),
     }),
     onSubmit: async (values) => {
@@ -51,20 +60,20 @@ const ProductForm = () => {
       });
 
       values.images.forEach((image) => {
-        appForm.append('images[]', image); // Append images properly
+        appForm.append('images[]', image); // Append new images properly
       });
 
-      const result = await dispatch(createProduct(appForm));
+      const result = await dispatch(updateProducts({ id, data: appForm }));
 
-      if (createProduct.rejected.match(result)) {
+      if (updateProducts.rejected.match(result)) {
         toast({
-          title: 'Created product failed',
-          description: result.payload || 'You input bad data',
+          title: 'Update failed',
+          description: result.payload || 'Something went wrong with updating',
         });
       } else if (result?.payload?.product) {
         toast({
-          title: 'Created product',
-          description: `Created Product ${result.payload.product.name}`,
+          title: 'Product updated',
+          description: `Updated Product ${result.payload.product.name}`,
         });
         setTimeout(() => {
           router.push('/dashboard/products');
@@ -72,12 +81,14 @@ const ProductForm = () => {
       }
     },
   });
+
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     formik.setFieldValue('images', files);
     const imageUrls = files.map((file) => URL.createObjectURL(file));
     setImagePreviews(imageUrls);
   };
+
   useEffect(() => {
     dispatch(allCats());
   }, [dispatch]);
@@ -87,6 +98,12 @@ const ProductForm = () => {
       imagePreviews.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [imagePreviews]);
+
+  useEffect(() => {
+    if (product?.images) {
+      setExistingImages(product.images);
+    }
+  }, [product]);
 
   return (
     <form onSubmit={formik.handleSubmit} className="max-w-lg mx-auto p-6 space-y-4 rounded shadow">
@@ -140,6 +157,7 @@ const ProductForm = () => {
               );
               formik.setFieldValue('categories', selectedOptions);
             }}
+            value={formik.values.categories}
             className="mt-1 w-full border-gray-300 rounded-md">
             {cats.map((cat) => (
               <option key={cat.id} value={cat.id}>
@@ -234,24 +252,38 @@ const ProductForm = () => {
         {formik.errors.images && <p className="text-red-600 text-sm">{formik.errors.images}</p>}
       </div>
 
-      {/* Image Previews */}
+      {/* Existing Image Previews */}
+      {existingImages.length > 0 && (
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          {existingImages.map((image, index) => (
+            <img
+              key={index}
+              src={image.url}
+              alt={`Existing image ${index}`}
+              className="h-24 w-24 object-cover rounded"
+            />
+          ))}
+        </div>
+      )}
+
+      {/* New Image Previews */}
       <div className="grid grid-cols-3 gap-4 mt-4">
         {imagePreviews.map((src, index) => (
           <img
             key={index}
             src={src}
-            alt={`Preview ${index}`}
+            alt={`New preview ${index}`}
             className="h-24 w-24 object-cover rounded"
           />
         ))}
       </div>
 
       {/* Submit Button */}
-      <Button type="submit" variant="secondary">
-        Submit
+      <Button type="submit" variant="secondary" disabled={formik.isSubmitting}>
+        {formik.isSubmitting ? 'Updating...' : 'Update Product'}
       </Button>
     </form>
   );
 };
 
-export default ProductForm;
+export default UpdateProductForm;

@@ -13,7 +13,7 @@ import { reset, userMe } from '@/features/users/userSlice';
 
 const Links = [
   { id: 1, name: 'Home', href: '/' },
-  { id: 2, name: 'Colection', href: '/colection' },
+  { id: 2, name: 'Collection', href: '/collection' },
   { id: 3, name: 'Categories', href: '/categories' },
   { id: 4, name: 'Contacts', href: '/contacts' },
 ];
@@ -24,12 +24,17 @@ const NavBar = () => {
   const me = useSelector((state) => state.users?.me);
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
-  const { theme, systemTheme, resolvedTheme } = useTheme();
+  const { theme, resolvedTheme } = useTheme();
 
   const handleClick = async () => {
-    dispatch(reset());
-    deleteCookiesHeader();
-    router.push('/');
+    try {
+      dispatch(reset());
+      await deleteCookiesHeader(); // Consider making deleteCookiesHeader return a promise if it doesn't already
+      router.push('/');
+    } catch (error) {
+      console.error('Error during logout:', error);
+      // Handle error if needed
+    }
   };
 
   const ulStyle = cn(
@@ -39,7 +44,7 @@ const NavBar = () => {
   );
 
   useEffect(() => {
-    dispatch(userMe());
+    dispatch(userMe()); // Fetch user data on component mount
   }, [dispatch]);
 
   return (
@@ -53,7 +58,7 @@ const NavBar = () => {
             <li
               key={link.id}
               className={cn(
-                'hover:text-gray-500  max-sm:p-5',
+                'hover:text-gray-500 max-sm:p-5',
                 pathname === link.href ? 'text-gray-500' : '',
               )}>
               <Link href={link.href}>{link.name}</Link>
@@ -61,7 +66,7 @@ const NavBar = () => {
             </li>
           ))}
           <li className="hidden max-sm:block absolute right-5 top-5">
-            <X className="cursor-pointer hidden max-sm:block" onClick={() => setVisible(false)} />
+            <X className="cursor-pointer" onClick={() => setVisible(false)} />
           </li>
         </ul>
         <AlignJustify
