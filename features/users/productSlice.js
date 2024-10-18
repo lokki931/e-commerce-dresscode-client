@@ -1,7 +1,16 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createSelector, createAsyncThunk } from '@reduxjs/toolkit';
+
 import { getCookiesHeader } from '@/app/actions';
 const apiProductsUrl = `${process.env.apiUrl}/products`;
 
+// Input selector that returns the product list directly
+const selectAllProducts = (state) => state.products?.all ?? [];
+
+// Memoized selector to return sorted products
+export const getAllProductsMemoized = createSelector([selectAllProducts], (products) => {
+  // Create a new array for sorting to avoid mutating the original state
+  return products.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+});
 export const allProducts = createAsyncThunk('product/allProducts', async () => {
   const response = await fetch(`${apiProductsUrl}/`, {
     method: 'GET',

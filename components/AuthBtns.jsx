@@ -8,14 +8,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { User } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
 const AuthBtns = ({ handleClick, me }) => {
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    setData(me);
-  }, [me]);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,7 +18,7 @@ const AuthBtns = ({ handleClick, me }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {!data ? (
+        {!me ? (
           <>
             <DropdownMenuItem>
               <Link href={'/signin'}>Login</Link>
