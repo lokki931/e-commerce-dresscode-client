@@ -1,6 +1,15 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import { getCookiesHeader } from '@/app/actions';
 const apiCategoriesUrl = `${process.env.apiUrl}/categories`;
+
+// Input selector that returns the product list directly
+const selectAllCategories = (state) => state.categories?.all ?? [];
+
+// Memoized selector to return sorted products
+export const getAllCategoriesMemoized = createSelector([selectAllCategories], (categories) => {
+  // Create a new array for sorting to avoid mutating the original state
+  return categories.slice().sort((a, b) => new Date(b.name) - new Date(a.name));
+});
 
 export const allCats = createAsyncThunk('category/allCats', async () => {
   const response = await fetch(`${apiCategoriesUrl}/`, {

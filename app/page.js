@@ -6,6 +6,8 @@ import 'swiper/css/pagination';
 import { allProducts, getAllProductsMemoized } from '@/features/users/productSlice';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Product from './_component/Product';
+import Link from 'next/link';
 
 export default function Home() {
   const [loading, setLoading] = useState(true); // Add loading state
@@ -26,12 +28,17 @@ export default function Home() {
   }
 
   // Sort and slice products
-  const heroProducts = products.slice(0, 4);
+  const heroProducts = [...products].slice(0, 4);
+  const hitProducts = [...products].filter((pruduct) => pruduct.hit === true);
+  const discountProducts = [...products].filter((pruduct) => pruduct.discount === true);
 
   return (
-    <div className="">
-      <div className="w-full h-64">
+    <div className="mb-3">
+      <div className="w-full">
         <Swiper
+          style={{
+            '--swiper-pagination-color': '#fff',
+          }}
           spaceBetween={30}
           centeredSlides={true}
           autoplay={{
@@ -48,10 +55,30 @@ export default function Home() {
               key={product.id + '_' + index}
               style={{ backgroundImage: `url(${product.images[0].url})`, height: '305px' }}
               className="bg-cover bg-center">
-              <p className="inline-flex  mt-7 ml-7 bg-slate-400 shadow">{product.name}</p>
+              <Link
+                href={`collection/${product.id}`}
+                className="inline-flex  mt-7 ml-7 bg-slate-400 shadow hover:opacity-80">
+                {product.name}
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
+      </div>
+      <div className="mt-5">
+        <h2 className="text-2xl font-extrabold mb-3">Hit Products</h2>
+        <div className="grid  grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {hitProducts?.map((product) => (
+            <Product key={product.id + '_hit'} product={product} />
+          ))}
+        </div>
+      </div>
+      <div className="mt-5">
+        <h2 className="text-2xl font-extrabold mb-3">Discount Products</h2>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {discountProducts?.map((product) => (
+            <Product key={product.id + '_discount'} product={product} />
+          ))}
+        </div>
       </div>
     </div>
   );
