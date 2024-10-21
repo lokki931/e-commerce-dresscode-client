@@ -14,8 +14,8 @@ import { reset, userMe } from '@/features/users/userSlice';
 const Links = [
   { id: 1, name: 'Home', href: '/' },
   { id: 2, name: 'Collection', href: '/collection' },
-  { id: 3, name: 'Categories', href: '/categories' },
-  { id: 4, name: 'Contacts', href: '/contacts' },
+  { id: 3, name: 'Contacts', href: '/contacts' },
+  { id: 4, name: 'Cart', href: '/cart' },
 ];
 
 const NavBar = () => {
