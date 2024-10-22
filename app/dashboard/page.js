@@ -2,8 +2,8 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { allCats } from '@/features/users/categorySlice';
-import { allProducts } from '@/features/users/productSlice';
+import { allCats } from '@/features/slices/categorySlice';
+import { allProducts } from '@/features/slices/productSlice';
 import { LayoutList, List, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 const Dashboard = () => {

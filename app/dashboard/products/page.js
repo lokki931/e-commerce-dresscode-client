@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { allProducts, deleteProduct, getByIdProducts } from '@/features/users/productSlice';
+import { allProducts, deleteProduct, getByIdProducts } from '@/features/slices/productSlice';
 import { toast } from '@/hooks/use-toast';
 import { EllipsisVertical } from 'lucide-react';
 import Image from 'next/image';

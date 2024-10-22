@@ -1,7 +1,7 @@
 'use client';
 
-import { allCats, getAllCategoriesMemoized } from '@/features/users/categorySlice';
-import { allProducts, getAllProductsMemoized } from '@/features/users/productSlice';
+import { allCats, getAllCategoriesMemoized } from '@/features/slices/categorySlice';
+import { allProducts, getAllProductsMemoized } from '@/features/slices/productSlice';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Product from '../_component/Product';

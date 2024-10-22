@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { allProducts, getAllProductsMemoized } from '@/features/users/productSlice';
+import { allProducts, getAllProductsMemoized } from '@/features/slices/productSlice';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Product from './_component/Product';

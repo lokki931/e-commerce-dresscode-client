@@ -24,9 +24,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <Providers>
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
+        <Providers>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -42,8 +42,8 @@ export default function RootLayout({ children }) {
             </div>
             <Toaster />
           </ThemeProvider>
-        </body>
-      </html>
-    </Providers>
+        </Providers>
+      </body>
+    </html>
   );
 }

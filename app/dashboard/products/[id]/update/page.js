@@ -4,10 +4,10 @@ import * as Yup from 'yup';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useEffect, useState } from 'react';
-import { allCats } from '@/features/users/categorySlice';
+import { allCats } from '@/features/slices/categorySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { updateProducts, getByIdProducts } from '@/features/users/productSlice';
+import { updateProducts, getByIdProducts } from '@/features/slices/productSlice';
 import { toast } from '@/hooks/use-toast';
 import { useRouter, useParams } from 'next/navigation';
 

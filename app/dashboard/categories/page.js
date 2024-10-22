@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { allCats, deleteCats, getByIdCats } from '@/features/users/categorySlice';
+import { allCats, deleteCats, getByIdCats } from '@/features/slices/categorySlice';
 import { toast } from '@/hooks/use-toast';
 import { EllipsisVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';

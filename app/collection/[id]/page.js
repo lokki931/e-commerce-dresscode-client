@@ -1,6 +1,6 @@
 'use client';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { getByIdProducts } from '@/features/users/productSlice';
+import { getByIdProducts } from '@/features/slices/productSlice';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

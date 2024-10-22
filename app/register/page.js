@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { userRegister } from '@/features/users/userSlice';
+import { userRegister } from '@/features/slices/userSlice';
 
 export default function Register() {
   const router = useRouter();

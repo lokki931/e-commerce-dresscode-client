@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { userLogin, userMe } from '@/features/users/userSlice';
+import { userLogin, userMe } from '@/features/slices/userSlice';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';

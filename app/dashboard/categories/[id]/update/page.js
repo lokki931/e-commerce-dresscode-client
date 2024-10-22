@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { getByIdCats, resetCatId, updateCats } from '@/features/users/categorySlice';
+import { getByIdCats, resetCatId, updateCats } from '@/features/slices/categorySlice';
 import { toast } from '@/hooks/use-toast';
 import { useParams, useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';

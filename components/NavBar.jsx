@@ -9,7 +9,7 @@ import { useTheme } from 'next-themes';
 import AuthBtns from '@/components/AuthBtns';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCookiesHeader } from '@/app/actions';
-import { reset, userMe } from '@/features/users/userSlice';
+import { reset, userMe } from '@/features/slices/userSlice';
 
 const Links = [
   { id: 1, name: 'Home', href: '/' },
