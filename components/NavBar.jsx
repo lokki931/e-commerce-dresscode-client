@@ -4,24 +4,25 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ModeToggle } from '@/components/ModeToggle';
 import { cn } from '@/lib/utils';
-import { AlignJustify, X } from 'lucide-react';
+import { AlignJustify, ShoppingBasket, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import AuthBtns from '@/components/AuthBtns';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCookiesHeader } from '@/app/actions';
 import { reset, userMe } from '@/features/slices/userSlice';
+import { Button } from './ui/button';
 
 const Links = [
   { id: 1, name: 'Home', href: '/' },
   { id: 2, name: 'Collection', href: '/collection' },
   { id: 3, name: 'Contacts', href: '/contacts' },
-  { id: 4, name: 'Cart', href: '/cart' },
 ];
 
 const NavBar = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const me = useSelector((state) => state.users?.me);
+  const { totalQuantity } = useSelector((state) => state.cart);
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const { theme, resolvedTheme } = useTheme();
@@ -74,6 +75,14 @@ const NavBar = () => {
           onClick={() => setVisible(!visible)}
         />
       </nav>
+      <Button
+        className="relative"
+        variant="outline"
+        size="icon"
+        onClick={() => router.push('/cart')}>
+        <ShoppingBasket />
+        <span className="absolute -translate-x-1/2 left-1/2 -top-2">{totalQuantity}</span>
+      </Button>
       <ModeToggle />
       <AuthBtns handleClick={handleClick} me={me} />
     </header>

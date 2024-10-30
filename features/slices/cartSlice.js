@@ -17,6 +17,7 @@ export const cartSlice = createSlice({
       if (!existingItem) {
         state.cartItems.push({
           id: newItem.id,
+          img: newItem.images[0].url,
           name: newItem.name,
           price: newItem.price,
           quantity: 1,
@@ -35,14 +36,9 @@ export const cartSlice = createSlice({
       const existingItem = state.cartItems.find((item) => item.id === id);
 
       if (existingItem) {
-        state.totalQuantity--;
-        state.totalAmount -= existingItem.price;
-        if (existingItem.quantity === 1) {
-          state.cartItems = state.cartItems.filter((item) => item.id !== id);
-        } else {
-          existingItem.quantity--;
-          existingItem.totalPrice -= existingItem.price;
-        }
+        state.totalQuantity -= existingItem.quantity;
+        state.totalAmount -= existingItem.totalPrice;
+        state.cartItems = state.cartItems.filter((item) => item.id !== id);
       }
     },
     clearCart: (state) => {
@@ -50,8 +46,35 @@ export const cartSlice = createSlice({
       state.totalQuantity = 0;
       state.totalAmount = 0;
     },
+    incrementQuantity: (state, action) => {
+      const id = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === id);
+
+      if (existingItem) {
+        existingItem.quantity++;
+        existingItem.totalPrice += existingItem.price;
+        state.totalQuantity++;
+        state.totalAmount += existingItem.price;
+      }
+    },
+    decrementQuantity: (state, action) => {
+      const id = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === id);
+
+      if (existingItem && existingItem.quantity > 1) {
+        existingItem.quantity--;
+        existingItem.totalPrice -= existingItem.price;
+        state.totalQuantity--;
+        state.totalAmount -= existingItem.price;
+      } else {
+        state.cartItems = state.cartItems.filter((item) => item.id !== id);
+        state.totalQuantity--;
+        state.totalAmount -= existingItem.price;
+      }
+    },
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart, incrementQuantity, decrementQuantity } =
+  cartSlice.actions;
 export default cartSlice.reducer;

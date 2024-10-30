@@ -1,7 +1,7 @@
 'use client';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { getByIdProducts } from '@/features/slices/productSlice';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'swiper/css';
@@ -10,9 +10,13 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Button } from '@/components/ui/button';
+import { addToCart } from '@/features/slices/cartSlice';
+import { toast } from '@/hooks/use-toast';
+import { ToastAction } from '@/components/ui/toast';
 
 const CollectionSiglePage = () => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const router = useRouter();
   const { id } = useParams();
   const dispatch = useDispatch();
   const product = useSelector((state) => state.products?.product?.product);
@@ -21,6 +25,20 @@ const CollectionSiglePage = () => {
       dispatch(getByIdProducts(id));
     }
   }, [dispatch, id]);
+  const handleClick = () => {
+    router.push('/cart');
+  };
+  const handleAddToCart = async () => {
+    await dispatch(addToCart(product));
+    toast({
+      title: `Product ${id} add.`,
+      action: (
+        <ToastAction altText="Goto cart" onClick={() => handleClick()}>
+          cart
+        </ToastAction>
+      ),
+    });
+  };
 
   return (
     <div className="grid sm:grid-cols-[45%_1fr] gap-5 mb-10">
@@ -60,8 +78,8 @@ const CollectionSiglePage = () => {
         <h1 className="text-3xl font-bold mb-2">{product?.name}</h1>
         <div className="inline-flex gap-3 my-2 items-baseline">
           <span>Stock: {product?.stock}</span>
-          <span>Price: {product?.price}$</span>
-          <Button type="button" variant="outline">
+          <span>Price: ${product?.price}</span>
+          <Button onClick={handleAddToCart} type="button" variant="outline">
             Add to cart
           </Button>
         </div>

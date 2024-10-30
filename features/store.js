@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { userSlice } from './slices/userSlice';
 import { categorySlice } from './slices/categorySlice';
 import { productSlice } from './slices/productSlice';
+import { orderSlice } from './slices/orderSlice';
 import { cartSlice } from './slices/cartSlice'; // Add your cart slice here
 import {
   persistStore,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   categories: categorySlice.reducer,
   products: productSlice.reducer,
   cart: persistedCartReducer, // Persisted cart slice
+  orders: orderSlice.reducer, // Persisted cart slice
 });
 
 // Configure store
